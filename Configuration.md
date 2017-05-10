@@ -4,6 +4,9 @@ Staff Ipads as a service: how do we define this service  for PPRPMU?
 ## Who
 * Managers or their representatives only
 
+## iOS version
+* iOS 10.2.1
+
 ## Define and Document iPad "image"
 * Settings
 	* Which ones do PPRPMU care about?

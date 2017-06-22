@@ -1,17 +1,29 @@
 # Configuration
-Staff Ipads as a service: how do we define this service  for PPRPMU?
+Staff Ipads as a service
 
 ## Who
 * Managers or their representatives only
 
-## iOS version
-* iOS 10.2.1
+### Apple ID
+* Parker Rec Programs
+	*iCloud
+		- [ ] 
 
 ## Define and Document iPad "image"
 * Settings
 	* Which ones do PPRPMU care about?
+	
+###Notifications
+*All off
+
 ### General 			
+#### iOS version
+		* iOS 10.3.2
 		* Handoff & Suggested Apps OFF
+		* Spotlight Search
+			- [ ] All off
+			
+		
 		* Auto Lock 2 Minutes
 		* Restrictions
 			- [ ] Safari ON

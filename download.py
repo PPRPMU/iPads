@@ -45,6 +45,13 @@ try:
                 continue
             fileName = msgId + "-" + part.get_filename()
 
+            with open(fileName) as f:
+                doc = slate.PDF(f)
+            if doc[0][0,57] = "PHILADELPHIA PARKS & RECREATION\n\nAQUATICS AUDIT CONTROL"
+                #move to Aquatics folder
+            # else if doc[0][0,#] = "PHILADELPHIA PARKS & RECREATION\n\nSite Visit Report"
+                #move to Site visit folder
+                
             if bool(fileName):
                 filePath = os.path.join(detach_dir, 'attachments', fileName)
                 if not os.path.isfile(filePath) :

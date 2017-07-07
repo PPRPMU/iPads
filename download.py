@@ -44,14 +44,15 @@ try:
                 # print part.as_string()
                 continue
             fileName = msgId + "-" + part.get_filename()
-
+            # Using slate to extract text and compare text to sort file into the correct folder.
             with open(fileName) as f:
                 doc = slate.PDF(f)
-            if doc[0][0,57] = "PHILADELPHIA PARKS & RECREATION\n\nAQUATICS AUDIT CONTROL"
-                #move to Aquatics folder
-            # else if doc[0][0,#] = "PHILADELPHIA PARKS & RECREATION\n\nSite Visit Report"
-                #move to Site visit folder
-                
+                text = str(doc)
+                title = text[37:59]
+                if title == "AQUATICS AUDIT CONTROL":
+                        shutil.move(fileName, "P:/PERFORMANCE MGMT/Projects/Test Python/" + str(fileName) + ".PDF")
+                    # else if title == "Site Visit Audit"
+                        # shutil.move(f, "destination")
             if bool(fileName):
                 filePath = os.path.join(detach_dir, 'attachments', fileName)
                 if not os.path.isfile(filePath) :

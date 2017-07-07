@@ -1,11 +1,13 @@
- with open(fileName) as f:
-                doc = slate.PDF(f)
-                text = str(doc)
-                title = text[2:59]
-                field_list = []
-                    if title = "PHILADELPHIA PARKS & RECREATION\n\nAQUATICS AUDIT CONTROL"
-                        shutil.move(f, "P:/PERFORMANCE MGMT/Projects/Test Python/" + str(fileName) + ".PDF")
-                        for x in y:
-                            f
-                    # else if title = "site visit"
-                        # shutil.move(f, "destination")
+import slate
+import shutil
+
+with open('test.PDF') as f:
+    doc = slate.PDF(f)
+    text = str(doc)
+    title = text[37:59]
+
+if title == "AQUATICS AUDIT CONTROL":
+    with open('move.PDF') as m:
+        shutil.move('test.PDF', 'iPads/')
+else:
+    print "Not Aquatics Audit Control"

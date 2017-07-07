@@ -13,8 +13,6 @@ with open('test.PDF') as f:
 if field_list[2] == "AQUATICS AUDIT CONTROL":
     title = field_list[2]
     pool = field_list[12]
-    print pool
-    print district1[0]
     # For loop to find district, try to see if any() can be used.
     for i in district1:
         if i == pool:

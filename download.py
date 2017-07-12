@@ -83,7 +83,7 @@ try:
                                 if i == k:
                                     print "Facility is " + i
                                     rename = str(msgId) + "-" + i + "-" + fileName
-                                    shutil.move(fileName, 'iPads/Forms/Aquatics/District ' + str(district_number) + "/" + rename)
+                                    shutil.move(fileName, 'Dropbox/iPads/Forms/Aquatics/District ' + str(district_number) + "/" + rename)
                                     print "Aquatics Audit Control for " + i + " moved to District " + str(district_number) + " folder."
                                     filed = True
                                     break
@@ -100,7 +100,7 @@ try:
                                 if i == k:
                                     print "Facility is " + i
                                     rename = str(msgId) + "-" + i + "-" + fileName
-                                    shutil.move(fileName, 'iPads/Forms/SVR/District ' + str(district_number) + "/" + rename)
+                                    shutil.move(fileName, 'Dropbox/iPads/Forms/SVR/District ' + str(district_number) + "/" + rename)
                                     print "Site Visit Report for " + i + " moved to District " + str(district_number) + " folder."
                                     filed = True
                                     break
@@ -116,7 +116,7 @@ try:
                                 if i == k:
                                     print "Facility is " + i
                                     rename = str(msgId) + "-" + i + "-" + fileName
-                                    shutil.move(fileName, 'iPads/Forms/' + rename)
+                                    shutil.move(fileName, 'Dropbox/iPads/Forms/' + rename)
                                     print "File not recognized for " + i + " moved to Forms folder."
                                     filed = True
                                     break

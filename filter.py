@@ -1,6 +1,6 @@
-import slate, shutil, re
+import slate, shutil, re, os
 
-# Will probablyl need to replace "&" with "and". Make change for all PDFs as well. iPad did not transcribe "&" correctly. Would need to make sure all forms keep same names as this list as well. Taken from list of facilities in Access.
+# May need to add districts if not filing correctly, this includes small differences in characters with spelling, punctuation, etc.
 district1 = ["Baldi", "Boyle", "Burholme Golf Center", "Burholme Park", "Chalfont", "District 1 Office", "Enfield Fields", "Fish Hatchery", "Fitzpatrick", "Fluehr Park", "Fox Chase", "Frankford & Pennypack Park", "Gifford", "Glen Foerd", "Hayes", "Holme Crispin Park", "Holmesburg", "Jacobs", "Jardel", "Junod", "Lackman", "Lincoln Pool", "Max Myers", "Mayfair", "McArdle", "Mitchell", "Northeast Lions Park", "Northeast OAC", "Palmer", "Pelbano", "Pennypack Creek Park", "Pennypack Environmental Center", "Pennypack on the Delaware", "Picariello", "Pleasant Hill Park", "Poquessing Creek Park", "Ramp", "Russo Park", "Somerton Woods", "Tarken", "Thomas Holme", "Torresdale", "Trumbette", "Frankford and Pennypack Park"]
 district2 = ["American Legion", "Benson Park", "Bridesburg", "Campbell Square", "Carmella", "Cione", "Cohocksink", "Cruz", "Disston", "Disston Park", "District 2 Office", "Dorsey", "Fishtown", "Franklin", "Gambrel", "Glavin", "Hancock", "Harrowgate Park", "Hart Park", "Hedge Street Park", "Heitzman", "Hetzell", "Konrad Square", "Lardner's Point", "Lederer Pool", "Lower Mayfair", "McIlvain", "Monkiewicz", "Moss", "Mullin", "Northern Liberties", "Pop's Playground", "Pulaski Park", "Roosevelt", "Samuel", "Shissler", "Stokely", "Tip Top", "Trenton & Auburn Playground", "Vogt", "Webb Street Play Lot", "Wilmot Park Playground", "Wissinoming", "Trenton & Auburn Playground"]
 district3 = ["12th & Cambria", "Barrett", "Butler & Percy Play Lot", "Cherashore", "Clarkson Park", "Daly Park", "Deni", "District 3 Office", "Feltonville", "Ferko", "Fisher Park", "Hissey", "Hope Park", "Houseman", "Hunting Park", "Juniata Park OAC", "Lauretha Vaird Boys/Girls Club", "Lawncrest", "Maguire", "Mann OAC", "McVeigh", "Merrit Square", "Nicetown Park", "Northwood Park", "Olney", "Overington Park", "Piccoli", "Ramblers", "Reed", "Rivera", "Ross Park", "Scanlon", "Schmidt", "Shevchenko Park", "Simpson", "Sturgis", "Tacony Creek Park", "Wissahickon", "Womrath Park", "Ziehler", "12th and Cambria", "Butler and Percy Play Lot",]
@@ -10,6 +10,7 @@ district6 = ["10th & Lemon Playground", "11th & C.B. Moore", "30th & Jefferson",
 district7 = ["22nd & Catherine Park", "Anderson", "Bainbridge Green", "Bardascino Park", "Barry", "Beck Park", "Burke", "Burke Playground", "Capitolo", "Chew", "Cianfrani Park", "Columbus Square", "D. Finnegan", "Dickinson Square", "DiSilvestro", "District 7 Office", "East Passyunk Community Recreation Center", "FDR  Park Boathouse", "FDR Park", "Ford", "Gold Star Park", "Gray's Ferry Crescent", "Greble Post (War Memorial)", "Guerin", "Hawthorne", "Hawthorne Park", "Herron", "Howard & Reed Park", "Jefferson Square", "Lanier", "Manton Street Park", "Marconi Plaza", "Mario Lanza Park", "Markward", "Mifflin Square", "Mollbore Terrace Park", "Murphy", "O'Connor Pool", "Palumbo", "Palumbo Park", "Paolone Park", "Ralph Brooks Park", "Ridgway Pool", "Rizzo Rink", "Sacks", "Seger", "Shot Tower", "Sims", "Smith", "South Philadelphia OAC", "Starr Garden", "Stinger Square", "Vare", "Weccacoe", "Weinberg Park", "Wharton Square", "22nd and Catherine Park", "Howard and Reed Park"]
 district8 = ["33rd & Wallace", "33rd & Wallace Playground", "37th & Mt. Vernon", "39th & Olive", "45th & Sansom Tot Lot", "48th & Woodland", "60th & Baltimore Park", "63rd & Lindbergh", "63rd & Lindbergh Park", "75th & Chelwynde", "Baker", "Ben Barkan Park", "Buist Park", "Carousel House", "Carroll Park", "Cedar Park", "Christy", "Cibotti", "Clark Park", "Clayborn & Lewis", "Clearview Park", "Cobbs Creek", "Cobbs Creek Environmental Education Center", "Conestoga", "Connell Park", "Conshohocken", "Deritis Playground", "District 8 Office", "Eastwick Park", "Eastwick Regional", "Elmwood Park", "Garden Court Tennis Courts", "Granahan", "Horticulture Center", "Horton Street Play Lot", "J. Finnegan", "John Anderson", "Julian Abele Park", "Kelly Pool", "Kingsessing", "Laura Sims", "Lee Cultural Center", "Malcolm X Memorial Park", "McCreesh", "Miles Mack", "Mill Creek", "Morris Park", "Muhammad Square", "Myers", "Nichols Park", "Papa", "Parkside Evans", "Pepper", "Philly Pumptrack", "Rose", "Rose Playground", "Sayre Morris", "Shepard", "Sherwood Park", "Triangle Park", "Tustin", "West Mill Creek", "Woodside Park", "Wright", "33rd and Wallace", "33rd and Wallace Playground", "37th and Mt. Vernon", "39th and Olive", "45th and Sansom Tot Lot", "48th and Woodland", "60th and Baltimore Park", "63rd and Lindbergh", "63rd and Lindbergh Park", "75th and Chelwynde", "Clayborn and Lewis"]
 
+# Convert lists for districts 1 - 8 into a list of lists, all_districts.
 all_districts = []
 all_districts.append(district1)
 all_districts.append(district2)
@@ -20,65 +21,46 @@ all_districts.append(district6)
 all_districts.append(district7)
 all_districts.append(district8)
 
-# Do not add fileName, fileNames, or msgId to download.py.
-fileNames = ["test.pdf", "test2.pdf", "test3.pdf", "test_site_visit2.pdf", "test_site_visit3.pdf", "Aquatics_Audit_Control.pdf", "Site_Visit_Report"]
-fileName = fileNames[6]
-msgId = 1
+formNames = ["AQUATICS AUDIT CONTROL", "Site Visit Report"]
 
 filed = False
 
-    # Open PDF, extract text in 'pdf', convert text to string in 'text', turn it into a list and remove line breaks with 'field_list'.
-with open(fileName) as f:
-    pdf = slate.PDF(f)
-    text = str(pdf)
-    field_list = text.split("\\n")
+def formfilter(fileName, formName, filed):
+    while filed == False:
+        for j in all_districts:
+            district_number = all_districts.index(j) + 1
+            for i in j:
+                for k in field_list:
+                    district_number = all_districts.index(j) + 1
+                    if i == k:
+                        print "Facility is " + i
+                        rename = i + "-" + fileName
+                        print "~/Dropbox/iPads/Forms/" + formName + "/District " + str(district_number) + "/" + rename
+                        shutil.move(fileName, "desktop/")
+                        #shutil.move(fileName, "~/Dropbox/iPads/Forms/" + formName + "/District " + str(district_number) + "/" + rename)
+                        print formName + " for " + i + " moved to District " + str(district_number) + " folder."
+                        filed = True
+                        break
+                        
+for fileName in os.listdir('.'):                        
+    filed = False
+    if fileName.endswith(".pdf"):
+            with open(fileName) as f:
+                print fileName
+                pdf = slate.PDF(f)
+                text = str(pdf)
+                field_list = text.split("\\n")
 
-# If statement, checks if title of form is true. First form is Aquatics Audit Control.
-if re.search("AQUATICS AUDIT CONTROL", text):
-    # Searches through each district, j, and looks at each facility, i, until file is moved.
-    while filed == False:
-        for j in all_districts:
-            district_number = all_districts.index(j) + 1
-            for i in j:
-                for k in field_list:
-                    district_number = all_districts.index(j) + 1
-                    if i == k:
-                        print "Facility is " + i
-                        rename = str(msgId) + "-" + i + "-" + fileName
-                        shutil.move(fileName, 'iPads/Forms/Aquatics/District ' + str(district_number) + "/" + rename)
-                        print "Aquatics Audit Control for " + i + " moved to District " + str(district_number) + " folder."
-                        filed = True
-                        break
-    
-# Second Form: Site Visit Report                 
-elif re.search("Site Visit Report", text):
-    # Searches through each district, j, and looks at each facility, i, until file is moved.
-    while filed == False:
-        for j in all_districts:
-            district_number = all_districts.index(j) + 1
-            for i in j:
-                for k in field_list:
-                    district_number = all_districts.index(j) + 1
-                    if i == k:
-                        print "Facility is " + i
-                        rename = str(msgId) + "-" + i + "-" + fileName
-                        shutil.move(fileName, 'iPads/Forms/SVR/District ' + str(district_number) + "/" + rename)
-                        print "Site Visit Report for " + i + " moved to District " + str(district_number) + " folder."
-                        filed = True
-                        break
+            # If statement, checks if title of form is true. First form is Aquatics Audit Control.
+            if re.search(formNames[0], text):
+                formfilter(fileName, formNames[0], filed)
 
-# If form is not recognized, move file to Forms folder
-else:
-    while filed == False:
-        for j in all_districts:
-            district_number = all_districts.index(j) + 1
-            for i in j:
-                for k in field_list:
-                    district_number = all_districts.index(j) + 1
-                    if i == k:
-                        print "Facility is " + i
-                        rename = str(msgId) + "-" + i + "-" + fileName
-                        shutil.move(fileName, 'iPads/Forms/' + rename)
-                        print "File not recognized for " + i + " moved to Forms folder."
-                        filed = True
-                        break
+            # Second Form: Site Visit Report                 
+            elif re.search(formNames[1], text):
+                 formfilter(fileName, formNames[1], filed)
+
+            # If form is not recognized, move file to Backlog folder.
+            else:
+                rename = fileName
+                shutil.move(fileName, "~/Dropbox/iPads/Forms/Backlog/" + rename)
+                print "File not recognized, moved to backlog."
